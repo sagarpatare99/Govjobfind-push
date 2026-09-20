@@ -1,20 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Subscribe to GovJobFind Alerts</title>
+  <title>Subscribing to Gov Job Find...</title>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 40px; background: #f4f7f6; }
-    .btn { background: #0047AB; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      text-align: center;
+      padding: 30px 20px;
+      background: #f8fafc;
+      color: #1e293b;
+    }
+    .loader {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 4px solid #e2e8f0;
+      border-top: 4px solid #0047AB;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 15px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .btn {
+      background: #0047AB;
+      color: white;
+      border: none;
+      padding: 10px 22px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+    }
   </style>
 </head>
-<body>
-  <h3 id="status">Click below to receive Job Alerts</h3>
-  <button class="btn" id="sub-btn" onclick="subscribe()">Allow Notifications</button>
+<body onload="subscribe()">
+  <div class="loader" id="spinner"></div>
+  <h3 id="status" style="margin: 10px 0 16px 0; font-size: 16px;">Connecting to Gov Job Find...</h3>
+  <button class="btn" id="sub-btn" style="display: none;" onclick="subscribe()">Click to Allow</button>
 
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
   <script>
-    // REPLACE THIS WITH YOUR FIREBASE CONFIG
     firebase.initializeApp({
       apiKey: "AIzaSyBjUiwyMmbJ-djwl-3v1nNPpPmY5gjQOSI",
   authDomain: "govjobfind-1e0ad.firebaseapp.com",
@@ -29,14 +58,18 @@
     function subscribe() {
       messaging.getToken({ vapidKey: "BE1neRHW0HRK5hztM6FxacI1IUxvo8-TYEHL9RvNXOzBnK7DOmfX4sBSulpIY8r3wfS7RZ5nn4OlnLK_Gb3w-QU" }).then((currentToken) => {
         if (currentToken) {
-          document.getElementById('status').innerText = "Subscribed Successfully! You can close this window.";
-          document.getElementById('sub-btn').style.display = "none";
-          setTimeout(() => { window.close(); }, 3000); // Auto-close popup
+          document.getElementById('spinner').style.display = "none";
+          document.getElementById('status').innerText = "✓ Subscribed! Closing...";
+          setTimeout(() => { window.close(); }, 1200);
         } else {
-          document.getElementById('status').innerText = "Permission denied.";
+          document.getElementById('spinner').style.display = "none";
+          document.getElementById('status').innerText = "Please confirm permission:";
+          document.getElementById('sub-btn').style.display = "inline-block";
         }
       }).catch((err) => {
-        console.log('An error occurred while retrieving token. ', err);
+        document.getElementById('spinner').style.display = "none";
+        document.getElementById('status').innerText = "Click below to allow notifications:";
+        document.getElementById('sub-btn').style.display = "inline-block";
       });
     }
   </script>
