@@ -56,21 +56,32 @@
     const messaging = firebase.messaging();
 
     function subscribe() {
-      messaging.getToken({ vapidKey: "BE1neRHW0HRK5hztM6FxacI1IUxvo8-TYEHL9RvNXOzBnK7DOmfX4sBSulpIY8r3wfS7RZ5nn4OlnLK_Gb3w-QU" }).then((currentToken) => {
-        if (currentToken) {
+      if ('serviceWorker' in navigator) {
+        // This line fixes the GitHub Pages subfolder issue
+        navigator.serviceWorker.register('./firebase-messaging-sw.js')
+        .then(function(registration) {
+          return messaging.getToken({ 
+            vapidKey: "BE1neRHW0HRK5hztM6FxacI1IUxvo8-TYEHL9RvNXOzBnK7DOmfX4sBSulpIY8r3wfS7RZ5nn4OlnLK_Gb3w-QU",
+            serviceWorkerRegistration: registration
+          });
+        })
+        .then((currentToken) => {
+          if (currentToken) {
+            document.getElementById('spinner').style.display = "none";
+            document.getElementById('status').innerText = "✓ Subscribed! Closing...";
+            setTimeout(() => { window.close(); }, 1200);
+          } else {
+            document.getElementById('spinner').style.display = "none";
+            document.getElementById('status').innerText = "Please confirm permission:";
+            document.getElementById('sub-btn').style.display = "inline-block";
+          }
+        }).catch((err) => {
           document.getElementById('spinner').style.display = "none";
-          document.getElementById('status').innerText = "✓ Subscribed! Closing...";
-          setTimeout(() => { window.close(); }, 1200);
-        } else {
-          document.getElementById('spinner').style.display = "none";
-          document.getElementById('status').innerText = "Please confirm permission:";
+          document.getElementById('status').innerText = "Click below to allow notifications:";
           document.getElementById('sub-btn').style.display = "inline-block";
-        }
-      }).catch((err) => {
-        document.getElementById('spinner').style.display = "none";
-        document.getElementById('status').innerText = "Click below to allow notifications:";
-        document.getElementById('sub-btn').style.display = "inline-block";
-      });
+          console.error(err);
+        });
+      }
     }
   </script>
 </body>
