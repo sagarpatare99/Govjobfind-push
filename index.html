@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Subscribe to GovJobFind Alerts</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 40px; background: #f4f7f6; }
+    .btn { background: #0047AB; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h3 id="status">Click below to receive Job Alerts</h3>
+  <button class="btn" id="sub-btn" onclick="subscribe()">Allow Notifications</button>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
+  <script>
+    // REPLACE THIS WITH YOUR FIREBASE CONFIG
+    firebase.initializeApp({
+      apiKey: "AIzaSyBjUiwyMmbJ-djwl-3v1nNPpPmY5gjQOSI",
+  authDomain: "govjobfind-1e0ad.firebaseapp.com",
+  projectId: "govjobfind-1e0ad",
+  storageBucket: "govjobfind-1e0ad.firebasestorage.app",
+  messagingSenderId: "993266902686",
+  appId: "1:993266902686:web:85280c433b9b37c7467d8f"
+    });
+
+    const messaging = firebase.messaging();
+
+    function subscribe() {
+      messaging.getToken({ vapidKey: "BE1neRHW0HRK5hztM6FxacI1IUxvo8-TYEHL9RvNXOzBnK7DOmfX4sBSulpIY8r3wfS7RZ5nn4OlnLK_Gb3w-QU" }).then((currentToken) => {
+        if (currentToken) {
+          document.getElementById('status').innerText = "Subscribed Successfully! You can close this window.";
+          document.getElementById('sub-btn').style.display = "none";
+          setTimeout(() => { window.close(); }, 3000); // Auto-close popup
+        } else {
+          document.getElementById('status').innerText = "Permission denied.";
+        }
+      }).catch((err) => {
+        console.log('An error occurred while retrieving token. ', err);
+      });
+    }
+  </script>
+</body>
+</html>
