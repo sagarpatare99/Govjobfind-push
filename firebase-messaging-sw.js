@@ -1,7 +1,6 @@
 importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js');
 
-// REPLACE THIS WITH YOUR FIREBASE CONFIG
 firebase.initializeApp({
   apiKey: "AIzaSyBjUiwyMmbJ-djwl-3v1nNPpPmY5gjQOSI",
   authDomain: "govjobfind-1e0ad.firebaseapp.com",
